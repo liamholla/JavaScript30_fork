@@ -10,55 +10,84 @@
 
 
   <div class="keys">
-    <div data-key="65" class="key">
+    <div code="KeyA" class="key">
       <kbd>A</kbd>
       <span class="sound">clap</span>
     </div>
-    <div data-key="83" class="key">
+    <div code="KeyS" class="key">
       <kbd>S</kbd>
       <span class="sound">hihat</span>
     </div>
-    <div data-key="68" class="key">
+    <div code="KeyD" class="key">
       <kbd>D</kbd>
       <span class="sound">kick</span>
     </div>
-    <div data-key="70" class="key">
+    <div code="KeyF" class="key">
       <kbd>F</kbd>
       <span class="sound">openhat</span>
     </div>
-    <div data-key="71" class="key">
+    <div code="KeyG" class="key">
       <kbd>G</kbd>
       <span class="sound">boom</span>
     </div>
-    <div data-key="72" class="key">
+    <div code="KeyH" class="key">
       <kbd>H</kbd>
       <span class="sound">ride</span>
     </div>
-    <div data-key="74" class="key">
+    <div code="KeyJ" class="key">
       <kbd>J</kbd>
       <span class="sound">snare</span>
     </div>
-    <div data-key="75" class="key">
+    <div code="KeyK" class="key">
       <kbd>K</kbd>
       <span class="sound">tom</span>
     </div>
-    <div data-key="76" class="key">
+    <div code="KeyL" class="key">
       <kbd>L</kbd>
       <span class="sound">tink</span>
     </div>
   </div>
 
-  <audio data-key="65" src="sounds/clap.wav"></audio>
-  <audio data-key="83" src="sounds/hihat.wav"></audio>
-  <audio data-key="68" src="sounds/kick.wav"></audio>
-  <audio data-key="70" src="sounds/openhat.wav"></audio>
-  <audio data-key="71" src="sounds/boom.wav"></audio>
-  <audio data-key="72" src="sounds/ride.wav"></audio>
-  <audio data-key="74" src="sounds/snare.wav"></audio>
-  <audio data-key="75" src="sounds/tom.wav"></audio>
-  <audio data-key="76" src="sounds/tink.wav"></audio>
+  <audio code="KeyA" src="sounds/clap.wav"></audio>
+  <audio code="KeyS" src="sounds/hihat.wav"></audio>
+  <audio code="KeyD" src="sounds/kick.wav"></audio>
+  <audio code="KeyF" src="sounds/openhat.wav"></audio>
+  <audio code="KeyG" src="sounds/boom.wav"></audio>
+  <audio code="KeyH" src="sounds/ride.wav"></audio>
+  <audio code="KeyJ" src="sounds/snare.wav"></audio>
+  <audio code="KeyK" src="sounds/tom.wav"></audio>
+  <audio code="KeyL" src="sounds/tink.wav"></audio>
 
 <script>
+
+  // Define a function to play a sound when a key is pressed
+  const playSound = (e) => {
+    const audio = document.querySelector(`audio[code="${e.code}"]`); // Find the audio element corresponding to the pressed key
+    const key = document.querySelector(`div[code="${e.code}"]`); // Find the key element corresponding to the pressed key
+    if (!audio) return; // If the audio element does not exist, return early. The prevents any other keys activating the animation
+ 
+    key.classList.add('playing'); // Add the 'playing' class to the key element
+
+    audio.currentTime = 0; // Reset the audio's current time to 0 (start from the beginning). This will allow you to tap the keys over and over and the sound will replay
+
+    audio.play(); // Play the audio
+  }
+
+  // Define a function to remove the 'playing' class when a CSS transition ends
+  const removeTransition = (e) => {
+    if (e.propertyName !== 'transform') return; // Check if the transitioned property is not 'transform'. This means that the remove transition won't occur until the animation is complete
+    e.target.classList.remove('playing'); // Remove the 'playing' class from the target element
+  }
+
+  // Select all elements with the class 'key' and convert them to an array
+  const keys = Array.from(document.querySelectorAll('.key'));
+  console.log(keys);
+
+  // Add a 'keydown' event listener to the window, which calls the playSound function
+  window.addEventListener('keydown', playSound);
+
+  // Add a 'transitionend' event listener to each key element, which calls the removeTransition function
+  keys.forEach(key => key.addEventListener('transitionend', removeTransition));
 
 </script>
 
