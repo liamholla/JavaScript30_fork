@@ -44,6 +44,28 @@
 <button></button>
 <script>
 
+const divs = document.querySelectorAll('div'); //Create a const that selects all the divs
+
+//Create a function that lists the class names 
+function logText(e) {
+  console.log(this.classList.value);
+  e.stopPropagation();
+}
+
+
+
+//For each div add an event listener that waits for a click then logs the class
+divs.forEach(div => div.addEventListener('click',logText),{
+  capture: false
+});
+
+/* This is equal to:
+divs.forEach( function(div) {
+  div.addEventListener('click,logText');
+})
+*/
+
+
 </script>
 </body>
 </html>
